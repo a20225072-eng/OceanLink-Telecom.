@@ -1,3 +1,4 @@
+
 package controller;
 
 import beans.Usuario;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import service.CorreoService;
 import jakarta.mail.MessagingException;
+
 import java.util.UUID;
 import java.io.IOException;
 
@@ -24,6 +26,7 @@ public class LoginServlet extends HttpServlet {
     private static final int DURACION_SESION = 30 * 60;
 
     static String paginaInicio(int rolId) {
+
         switch (rolId) {
             case 1: return "/UsuarioServlet?action=lista";
             case 2: return "/CapacityPlannerServlet?action=capacidad";
@@ -114,6 +117,8 @@ public class LoginServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         String action = request.getParameter("action");
 
         if (action == null) {
@@ -123,6 +128,7 @@ public class LoginServlet extends HttpServlet {
         System.out.println("Accion recibida: " + action);
 
         LoginDAO loginDAO = new LoginDAO();
+
 
         if (action.equals("login")) {
 
@@ -161,7 +167,10 @@ public class LoginServlet extends HttpServlet {
                 );
             }
 
-        } else if (action.equals("recuperar")) {
+        }
+
+
+        else if (action.equals("recuperar")) {
 
             String correo = request.getParameter("correo");
 
@@ -222,7 +231,11 @@ public class LoginServlet extends HttpServlet {
 
                     response.sendRedirect(
                             request.getContextPath()
-                                    + "/login/recuperarContraseniaError.jsp"
+                                    + "/login/recuperarContraseniaError.jsp?correo="
+                                    + java.net.URLEncoder.encode(
+                                    correo == null ? "" : correo,
+                                    "UTF-8"
+                            )
                     );
                 }
 
@@ -232,11 +245,18 @@ public class LoginServlet extends HttpServlet {
 
                 response.sendRedirect(
                         request.getContextPath()
-                                + "/login/recuperarContraseniaError.jsp"
+                                + "/login/recuperarContraseniaError.jsp?correo="
+                                + java.net.URLEncoder.encode(
+                                correo == null ? "" : correo,
+                                "UTF-8"
+                        )
                 );
             }
 
-        } else if (action.equals("cambiarPassword")) {
+        }
+
+
+        else if (action.equals("cambiarPassword")) {
 
             String token = request.getParameter("token");
 
@@ -267,7 +287,7 @@ public class LoginServlet extends HttpServlet {
 
                     response.sendRedirect(
                             request.getContextPath()
-                                    + "/login/loginIndex.jsp"
+                                    + "/login/contrasenaActualizada.jsp"
                     );
 
                 } else {
@@ -292,7 +312,10 @@ public class LoginServlet extends HttpServlet {
                 ).forward(request, response);
             }
 
-        } else {
+        }
+
+
+        else {
 
             response.sendRedirect(
                     request.getContextPath()

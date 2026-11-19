@@ -37,6 +37,10 @@
                 <h1>Clientes</h1>
                 <p class="small">Empresas que contratan capacidad. Aparecen al registrar una solicitud en el Capacity Planner.</p>
             </div>
+              <a class="ghost"
+                       href="<%= request.getContextPath() %>/ReporteClienteServlet">
+                        Descargar PDF
+                    </a>
             <a class="primary" href="<%= servlet %>?action=formCrear">Registrar cliente</a>
         </div>
 
